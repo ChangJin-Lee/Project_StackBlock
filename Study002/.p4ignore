@@ -1,0 +1,42 @@
+# 빌드 및 임시 파일
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+.vscode/
+.vs/
+*.sln
+*.xcodeproj
+*.opensdf
+*.sdf
+*.cache
+*.VC.db
+
+# 로그 파일
+*.log
+
+# 사용자 설정 파일
+*.user
+*.userprefs
+*.uprojectdirs
+*.user.*
+
+# 자동 생성된 파일
+*.dll
+*.pdb
+*.exe
+*.app
+*.dylib
+*.so
+
+# 플랫폼별 파일
+*.apk
+*.ipa
+
+# 언리얼 에디터 설정 파일 (필요에 따라 추가)
+Config/DefaultEditor.ini
+Config/DefaultEditorPerProjectUserSettings.ini
+Config/DefaultEditorSettings.ini
+
+# 언리얼 엔진의 특정 디렉터리
+Engine/Plugins/
