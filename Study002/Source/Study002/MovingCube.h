@@ -31,12 +31,26 @@ private:
 	UStaticMeshComponent* CubeMesh;
 
 	UPROPERTY(EditAnywhere, Category="Moving Cube")
-	UCurveVector* MovementCurve;
+	TArray <UCurveVector*> MovementCurve;
 
+
+
+	
+public:
 	FOnTimelineVector TimelineCallback;
 	FTimeline CurveTimeline;
 	FVector InitialPosition;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable, Category="Moving Cube")
 	void MovePosition(FVector Value);
+
+	UFUNCTION(BlueprintCallable, Category="Moving Cube")
+	void SetCurve(float index);	
+
+	UPROPERTY(BlueprintReadWrite, Category="Moving Cube")
+	bool IsCubeMove;
+
+private:
+	bool IsSetCurve;
+
 };

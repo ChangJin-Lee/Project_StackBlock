@@ -23,14 +23,7 @@ void AMovingCube::BeginPlay()
 	Super::BeginPlay();
 
 	InitialPosition = GetActorLocation();
-
-	if(MovementCurve)
-	{
-		TimelineCallback.BindDynamic(this, &AMovingCube::MovePosition);
-		CurveTimeline.AddInterpVector(MovementCurve, TimelineCallback);
-		CurveTimeline.SetLooping(true);
-		CurveTimeline.PlayFromStart();
-	}
+	IsSetCurve = false;
 }
 
 // Called every frame
@@ -38,17 +31,38 @@ void AMovingCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CurveTimeline.TickTimeline(DeltaTime);
+	if(IsCubeMove && IsSetCurve)
+	{
+		CurveTimeline.TickTimeline(DeltaTime);
+	}
 }
 
+void AMovingCube::SetCurve(float index)
+{
+	if(index > MovementCurve.Num())
+	{
+		UE_LOG(LogTemp, Display, TEXT("No Curve!"));
+		return;
+	}
+	
+	if(!MovementCurve.IsEmpty())
+	{
+		TimelineCallback.BindDynamic(this, &AMovingCube::MovePosition);
+		CurveTimeline.AddInterpVector(MovementCurve[index], TimelineCallback);
+		CurveTimeline.SetLooping(true);
+		CurveTimeline.PlayFromStart();
+
+		IsSetCurve = true;
+	}
+}
 
 void AMovingCube::MovePosition(FVector Value)
 {
-	if(MovementCurve)
+	if(!MovementCurve.IsEmpty())
 	{
 		FVector curPos = InitialPosition + Value * 100.f;
 		SetActorLocation(curPos);
 	}
-
-	
 }
+
+
