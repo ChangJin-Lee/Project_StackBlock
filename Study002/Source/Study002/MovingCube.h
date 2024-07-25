@@ -50,7 +50,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category="Moving Cube")
 	bool IsCubeMove;
 
-private:
+
+private: 
+	UPROPERTY(BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
 	bool IsSetCurve;
+
+	
 
 };
