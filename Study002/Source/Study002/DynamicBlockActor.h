@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "DynamicMeshActor.h"
+#include "Components/BoxComponent.h"
 #include "DynamicBlockActor.generated.h"
 
 /**
@@ -23,9 +24,24 @@ private:
 // Component
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* CuttingMeshComponent;
+	UBoxComponent* BoxCollision;
 
 // Function
 public:
 	void SubstractBlock();
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector MaxAxis1;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector MinAxis1;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector MaxAxis2;
+
+	UPROPERTY(BlueprintReadWrite)
+	FVector MinAxis2;
+	
+	UFUNCTION(BlueprintCallable)
+	UDynamicMesh* GetOverlappedArea(UBoxComponent* TargetBoxComponent);
 };
