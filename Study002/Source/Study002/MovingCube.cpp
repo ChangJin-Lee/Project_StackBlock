@@ -23,6 +23,19 @@ void AMovingCube::BeginPlay()
 	Super::BeginPlay();
 
 	InitialPosition = GetActorLocation();
+	TargetPosition = TargetActor->GetActorLocation();
+	
+	TargetXY = FVector2D(TargetPosition.X, TargetPosition.Y);
+
+	TargetPosition.Z += HeightOffset;
+
+	if(TargetActor)
+	{
+		TargetDirection = (TargetPosition - InitialPosition).GetSafeNormal();
+	}
+
+	
+	
 	IsSetCurve = false;
 }
 
@@ -31,9 +44,24 @@ void AMovingCube::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FVector CurrentPosition = GetActorLocation();
+	FVector2D CurrentXY(CurrentPosition.X, CurrentPosition.Y);
+	float DistanceToTarget = FVector2D::Distance(CurrentXY, TargetXY);
+	
+	if(DistanceToTarget < DistanceToTargetLimit)
+	{
+		FVector ForwardDirection = GetActorForwardVector() * EscapeSpeed * DeltaTime;
+		
+		SetActorLocation(ForwardDirection);
+	}
+	
 	if(IsCubeMove && IsSetCurve)
 	{
 		CurveTimeline.TickTimeline(DeltaTime);
+		TimeElapsed += DeltaTime;
+		float Alpha = FMath::Clamp(TimeElapsed / LerpDuration, 0.f, 1.f);
+		FVector NewPosition = FMath::Lerp(InitialPosition, TargetPosition, Alpha);
+		SetActorLocation(NewPosition);
 	}
 }
 
@@ -49,8 +77,8 @@ void AMovingCube::SetCurve(float index)
 	{
 		TimelineCallback.BindDynamic(this, &AMovingCube::MovePosition);
 		CurveTimeline.AddInterpVector(MovementCurve[index], TimelineCallback);
-		CurveTimeline.SetLooping(true);
-		CurveTimeline.PlayFromStart();
+		CurveTimeline.SetLooping(IsLooping);
+		CurveTimeline.Play();
 
 		IsSetCurve = true;
 	}
@@ -60,9 +88,8 @@ void AMovingCube::MovePosition(FVector Value)
 {
 	if(!MovementCurve.IsEmpty())
 	{
-		FVector curPos = InitialPosition + Value * 100.f;
-		SetActorLocation(curPos);
+		float Alpha = FMath::Clamp(TimeElapsed / LerpDuration, 0.f, 1.f);
+		FVector NewPosition = FMath::Lerp(InitialPosition, TargetPosition, Alpha);
+		SetActorLocation(NewPosition);
 	}
 }
-
-

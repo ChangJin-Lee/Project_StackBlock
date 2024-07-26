@@ -32,15 +32,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Moving Cube")
 	TArray <UCurveVector*> MovementCurve;
-
-
-
 	
 public:
-	FOnTimelineVector TimelineCallback;
-	FTimeline CurveTimeline;
-	FVector InitialPosition;
-
 	UFUNCTION(BlueprintCallable, Category="Moving Cube")
 	void MovePosition(FVector Value);
 
@@ -50,11 +43,38 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category="Moving Cube")
 	bool IsCubeMove;
 
+	UPROPERTY(EditAnywhere, Category="Moving Cube")
+	bool IsLooping;
 
-private: 
+private:
+	FOnTimelineVector TimelineCallback;
+	FTimeline CurveTimeline;
+	FVector InitialPosition;
+	FVector TargetPosition;
+	FVector2D TargetXY;
+	FVector TargetDirection;
+
+	float TimeElapsed = 0;
+	
 	UPROPERTY(BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
 	bool IsSetCurve;
 
 	
-
+	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess = "true"))
+	AActor* TargetActor;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
+	float MoveRange = 1.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
+	float EscapeSpeed = 5.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
+	float LerpDuration = 5.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
+	float HeightOffset = 10.f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Moving Cube", meta=(AllowPrivateAccess = "true"))
+	float DistanceToTargetLimit = 100.f;
 };
