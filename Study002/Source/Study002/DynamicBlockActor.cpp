@@ -12,6 +12,7 @@ ADynamicBlockActor::ADynamicBlockActor()
 	BoxCollision->SetupAttachment(DynamicMeshComponent);
 }
 
+// BoxCollision의 Scale에 따라서 매시의 크기가 바뀜
 void ADynamicBlockActor::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
@@ -23,52 +24,49 @@ void ADynamicBlockActor::OnConstruction(const FTransform& Transform)
 
 		FTransform T;
 		FGeometryScriptPrimitiveOptions Options;
-		float DimensionX = BoxCollision->GetScaledBoxExtent().X * 2;
-		float DimensionY = BoxCollision->GetScaledBoxExtent().Y * 2;
-		float DimensionZ = BoxCollision->GetScaledBoxExtent().Z * 2;
-		float TransformLocationZ = BoxCollision->GetScaledBoxExtent().Z * -1;
+		FVector Dimension = BoxCollision->GetScaledBoxExtent();
+		float DimensionX = Dimension.X * 2;
+		float DimensionY = Dimension.Y * 2;
+		float DimensionZ = Dimension.Z * 2;
+		float TransformLocationZ = Dimension.Z * -1;
 		T.SetLocation(FVector(0,0,TransformLocationZ));
 		UGeometryScriptLibrary_MeshPrimitiveFunctions::AppendBox(DynamicMesh, Options, T, DimensionX, DimensionY, DimensionZ);
 		DynamicMeshComponent->EnableComplexAsSimpleCollision();
 	}
 }
 
+// 겹쳐진 영역의 좌표, 크기를 구하는 함수
+void ADynamicBlockActor::SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxComponent* Box2)
+{
+    FVector Box1Location = Box1->GetComponentLocation();
+    FVector Box1Extent = Box1->GetScaledBoxExtent();
+
+    FVector Box2Location = Box2->GetComponentLocation();
+    FVector Box2Extent = Box2->GetScaledBoxExtent();
+
+    FVector Max1 = Box1Location + Box1Extent;
+    FVector Min1 = Box1Location - Box1Extent;
+
+    FVector Max2 = Box2Location + Box2Extent;
+    FVector Min2 = Box2Location - Box2Extent;
+	
+	FVector OverlapMax = FVector(FMath::Min(Max1.X, Max2.X), FMath::Min(Max1.Y, Max2.Y), FMath::Min(Max1.Z, Max2.Z));
+    FVector OverlapMin = FVector(FMath::Max(Min1.X, Min2.X), FMath::Max(Min1.Y, Min2.Y), FMath::Max(Min1.Z, Min2.Z));
+
+	OverlapLocationVector = (OverlapMin + OverlapMax) / 2.0f;
+	OverlapExtentVector = OverlapMax - OverlapMin;
+}
+
+// 겹친 영역 만큼 DynamicMesh를 만들고 Return하는 함수
 UDynamicMesh* ADynamicBlockActor::GetOverlappedArea(UBoxComponent* TargetBoxComponent)
 {
-	FVector Location = BoxCollision->GetComponentLocation();
-	FVector Extent = BoxCollision->GetScaledBoxExtent();
 	UDynamicMesh* TargetMesh = nullptr;
-	MaxAxis1 = Location + Extent;
-	MinAxis1 = Location - Extent;
-
-	FVector TargetLocation = TargetBoxComponent->GetComponentLocation();
-	FVector TargetExtent = TargetBoxComponent->GetScaledBoxExtent();
-	
-	MaxAxis2 = TargetLocation + TargetExtent;
-	MinAxis2 = TargetLocation - TargetExtent;
-
-	FVector MaxPoint = FVector(
-			FMath::Min(MaxAxis1.X, MaxAxis2.X),
-			FMath::Min(MaxAxis1.Y, MaxAxis2.Y),
-			FMath::Min(MaxAxis1.Z, MaxAxis2.Z)
-			);
-	
-	FVector MinPoint = FVector(
-		FMath::Max(MinAxis1.X, MinAxis2.X),
-		FMath::Max(MinAxis1.Y, MinAxis2.Y),
-		FMath::Max(MinAxis1.Z, MinAxis2.Z)
-		);
-
-	FVector Dimension = FVector(MaxPoint.X - MinPoint.X,MaxPoint.Y - MinPoint.Y,MaxPoint.Z - MinPoint.Z);
-	FVector TLocation = FVector((MaxPoint.X + MinPoint.X)/2,(MaxPoint.Y + MinPoint.Y)/2,(MaxPoint.Z + MinPoint.Z)/2);
+	SetOverlapExtentAndLocation(BoxCollision, TargetBoxComponent);
 
 	UDynamicMesh* DynamicMesh = DynamicMeshComponent->GetDynamicMesh();
 	FTransform Transform = DynamicMeshComponent->GetComponentTransform();
-	FVector BoxTransform = Transform.InverseTransformPosition(TLocation);
-	
-	UE_LOG(LogTemp, Warning, TEXT("Dimension Location: %s"), *Dimension.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("BoxTransform Location: %s"), *BoxTransform.ToString());
-	
+	FVector BoxTransform = Transform.InverseTransformPosition(OverlapLocationVector);
+
 	if(DynamicMesh)
 	{
 		UDynamicMesh* ComputeMesh = AllocateComputeMesh();
@@ -76,38 +74,19 @@ UDynamicMesh* ADynamicBlockActor::GetOverlappedArea(UBoxComponent* TargetBoxComp
 		{
 			FTransform T;
 			FGeometryScriptPrimitiveOptions Options;
-			T.SetLocation(FVector(BoxTransform.X, BoxTransform.Y, BoxTransform.Z - Dimension.Z /2 ));
+			FVector LocalOverlapLocation = FVector(BoxTransform.X, BoxTransform.Y, BoxTransform.Z - OverlapExtentVector.Z /2 );
+			T.SetLocation(LocalOverlapLocation);
+			
 			TargetMesh = UGeometryScriptLibrary_MeshPrimitiveFunctions::AppendBox(
-				DynamicMesh,
+				ComputeMesh,
 				Options,
 				T,
-				Dimension.X,
-				Dimension.Y,
-				Dimension.Z
+				OverlapExtentVector.X,
+				OverlapExtentVector.Y,
+				OverlapExtentVector.Z
 				);
 		}
 	}
 
 	return TargetMesh;
-}
-
-void ADynamicBlockActor::SubstractBlock()
-{
-	UDynamicMesh* AllocatedMesh = AllocateComputeMesh();
-
-	if(AllocatedMesh)
-	{
-		FTransform T;
-		T.SetLocation(FVector(20,20,50));
-		FGeometryScriptPrimitiveOptions Options;
-		UGeometryScriptLibrary_MeshPrimitiveFunctions::AppendBox(AllocatedMesh, Options, T, 100, 100, 100);
-	}
-	
-	UDynamicMesh* DynamicMesh = DynamicMeshComponent->GetDynamicMesh();
-
-	if(DynamicMesh)
-	{
-		FTransform T;
-		T.SetLocation(FVector(20,20,50));
-	}
 }

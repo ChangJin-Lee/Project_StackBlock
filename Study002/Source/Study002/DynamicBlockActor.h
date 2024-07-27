@@ -28,8 +28,6 @@ public:
 
 // Function
 public:
-	void SubstractBlock();
-
 	UPROPERTY(BlueprintReadWrite)
 	FVector MaxAxis1;
 
@@ -41,7 +39,14 @@ public:
 
 	UPROPERTY(BlueprintReadWrite)
 	FVector MinAxis2;
-	
+
+	// Call from Blueprint
 	UFUNCTION(BlueprintCallable)
 	UDynamicMesh* GetOverlappedArea(UBoxComponent* TargetBoxComponent);
+
+	void SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxComponent* Box2);
+
+private:
+	FVector OverlapLocationVector;
+	FVector OverlapExtentVector;
 };
