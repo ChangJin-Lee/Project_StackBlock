@@ -10,13 +10,12 @@
     <list default="true" id="12e066e4-f375-41f4-bc6d-94091ad91fec" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BP_MovingCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_MovingCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/CircleVectorCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/CircleVectorCurve.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/CircleVectorCurve.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ZigZagVectorCurve.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ZigZagVectorCurve.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/1/HF/YFYBQ72OYLHJQS0TSSXGBV.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/1/HF/YFYBQ72OYLHJQS0TSSXGBV.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/C/W0/2FT2X4A3KIGLKDRXZZ1YPE.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/C/W0/2FT2X4A3KIGLKDRXZZ1YPE.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/3/OG/KDQDMXAXZXD8VLDDU4K3JL.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/3/OG/KDQDMXAXZXD8VLDDU4K3JL.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/9/21/WWYX44RDCCS98492P9K9O3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/9/21/WWYX44RDCCS98492P9K9O3.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Study002/MovingCube.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Study002/MovingCube.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Study002/MovingCube.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Study002/MovingCube.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,6 +73,7 @@
       <workItem from="1721978010635" duration="435000" />
       <workItem from="1721978466341" duration="2226000" />
       <workItem from="1721981937444" duration="18319000" />
+      <workItem from="1722156775769" duration="5368000" />
     </task>
     <servers />
   </component>
