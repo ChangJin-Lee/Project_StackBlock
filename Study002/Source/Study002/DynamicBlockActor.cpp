@@ -52,9 +52,12 @@ void ADynamicBlockActor::SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxCo
 	
 	FVector OverlapMax = FVector(FMath::Min(Max1.X, Max2.X), FMath::Min(Max1.Y, Max2.Y), FMath::Min(Max1.Z, Max2.Z));
     FVector OverlapMin = FVector(FMath::Max(Min1.X, Min2.X), FMath::Max(Min1.Y, Min2.Y), FMath::Max(Min1.Z, Min2.Z));
-
+	
 	OverlapLocationVector = (OverlapMin + OverlapMax) / 2.0f;
 	OverlapExtentVector = OverlapMax - OverlapMin;
+
+	UE_LOG(LogTemp, Warning, TEXT("OverlapLocationVector :  %s"), *OverlapLocationVector.ToString());
+	UE_LOG(LogTemp, Warning, TEXT("OverlapExtentVector :  %s"), *OverlapExtentVector.ToString());
 }
 
 // 겹친 영역 만큼 DynamicMesh를 만들고 Return하는 함수
