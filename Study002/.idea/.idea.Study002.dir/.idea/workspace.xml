@@ -7,19 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12e066e4-f375-41f4-bc6d-94091ad91fec" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP_CubeSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_CubeSpawner.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP_MovingBlock.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_MovingBlock.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP_MovingCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_MovingCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_Player.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BP_Wall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BP_Wall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Curve_BackAndForthXAxis.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Curve_BackAndForthYAxis.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Curve_BackAndForthZAxis.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlayLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlayLevel.umap" afterDir="false" />
-    </list>
+    <list default="true" id="12e066e4-f375-41f4-bc6d-94091ad91fec" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -85,6 +73,7 @@
       <workItem from="1722314231951" duration="569000" />
       <workItem from="1722421385357" duration="589000" />
       <workItem from="1722442864248" duration="675000" />
+      <workItem from="1722523183300" duration="595000" />
     </task>
     <servers />
   </component>
