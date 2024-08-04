@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "DynamicMeshActor.h"
 #include "Components/BoxComponent.h"
+#include "Components/TimelineComponent.h"
 #include "DynamicBlockActor.generated.h"
 
 /**
@@ -26,6 +27,12 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UBoxComponent* BoxCollision;
 
+	virtual void BeginPlay() override;
+	
+	// UFUNCTION()
+	// void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	
 // Function
 public:
 	UPROPERTY(BlueprintReadWrite)
@@ -46,7 +53,32 @@ public:
 
 	void SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxComponent* Box2);
 
+	// FTimerHandle TimerHandle;
+	//
+	//
+	// UTimelineComponent* MoveBlockTimelineComponent;
+	//
+	// UPROPERTY()
+	// FOnTimelineFloat MoveBlockCallback;
+	//
+	// UPROPERTY()
+	// FOnTimelineEvent MoveBlockFinishedCallback;
+	//
+	// UPROPERTY(EditAnywhere)
+	// UCurveFloat* MoveBlockCurve;
+	//
+	// UFUNCTION()
+	// void HandleMoveProgress(float value);
+	//
+	// UFUNCTION()
+	// void HandleMoveFinished();
+	//
+	// FVector InitialLocation;
+	// FVector TargetLocation;
+
 private:
 	FVector OverlapLocationVector;
 	FVector OverlapExtentVector;
+
+	// bool IsOverlapped = false;
 };

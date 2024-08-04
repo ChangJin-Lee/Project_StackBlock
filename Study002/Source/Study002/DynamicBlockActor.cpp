@@ -2,8 +2,6 @@
 
 
 #include "DynamicBlockActor.h"
-
-#include "AI/NavigationModifier.h"
 #include "GeometryScript/MeshPrimitiveFunctions.h"
 
 ADynamicBlockActor::ADynamicBlockActor()
@@ -11,6 +9,60 @@ ADynamicBlockActor::ADynamicBlockActor()
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxCollision->SetupAttachment(DynamicMeshComponent);
 }
+
+// void ADynamicBlockActor::BeginPlay()
+// {
+	// InitialLocation = GetActorLocation();
+	// TargetLocation = FVector(0,0, FMath::RandRange(500,800));
+	// FVector NormalVector = TargetLocation - InitialLocation;
+	//
+	// NormalVector.Normalize();
+	//
+	// TargetLocation += NormalVector * 800;
+	//
+	// MoveBlockCallback.BindUFunction(this , FName("HandleMoveProgress"));
+	// MoveBlockTimelineComponent->AddInterpFloat(MoveBlockCurve, MoveBlockCallback);
+	//
+	// MoveBlockFinishedCallback.BindUFunction(this, FName("HandleMoveFinished"));
+	// MoveBlockTimelineComponent->SetTimelineFinishedFunc(MoveBlockFinishedCallback);
+	
+// }
+
+// void ADynamicBlockActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+// 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+// {
+// 	TargetLocation = GetActorLocation();
+//
+// 	if(!IsOverlapped)
+// 	{
+// 		if(OtherActor)
+// 		{
+// 			if(OtherActor->ActorHasTag("Floor"))
+// 			{
+// 				
+// 			}
+// 			else if(OtherActor->ActorHasTag("Block"))
+// 			{
+// 			
+// 			}
+// 		
+// 		}
+//
+//
+// 		IsOverlapped = true;
+// 	}
+// }
+
+// void ADynamicBlockActor::HandleMoveProgress(float value)
+// {
+// 	FVector NewLocation = FMath::Lerp(InitialLocation, TargetLocation, value);
+// 	SetActorLocation(NewLocation);
+// }
+//
+// void ADynamicBlockActor::HandleMoveFinished()
+// {
+// 	
+// }
 
 // BoxCollision의 Scale에 따라서 매시의 크기가 바뀜
 void ADynamicBlockActor::OnConstruction(const FTransform& Transform)
