@@ -7,17 +7,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="12e066e4-f375-41f4-bc6d-94091ad91fec" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Study002.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Block/BP_MovingBlock.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Block/BP_MovingBlock.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BP_Player.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BP_Player.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/GameMode/PlayGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/GameMode/PlayGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Level/PlayLevel.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Level/PlayLevel.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Spawner/BP_CubeSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Spawner/BP_CubeSpawner.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/Architecture/Floor_400x400.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/Architecture/Floor_400x400.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/StarterContent/HDRI/HDRI_Epic_Courtyard_Daylight.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/Study002/DynamicBlockActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/Study002/DynamicBlockActor.cpp" afterDir="false" />
-    </list>
+    <list default="true" id="12e066e4-f375-41f4-bc6d-94091ad91fec" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -38,9 +28,6 @@
     <setting file="file://$PROJECT_DIR$/Source/Study002/perforcecPPPP.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../ToonTanks/Source/ToonTanks/BasePawn.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
-  <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
-  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -52,7 +39,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;#01-Refactoring&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
@@ -87,10 +74,6 @@
       <workItem from="1722421385357" duration="589000" />
       <workItem from="1722442864248" duration="675000" />
       <workItem from="1722523183300" duration="595000" />
-      <workItem from="1722851563464" duration="81000" />
-      <workItem from="1722851704347" duration="32000" />
-      <workItem from="1722851881954" duration="285000" />
-      <workItem from="1722852231815" duration="16498000" />
     </task>
     <servers />
   </component>
