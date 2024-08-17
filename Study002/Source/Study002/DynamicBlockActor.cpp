@@ -175,8 +175,13 @@ void ADynamicBlockActor::RemoveOverlappingArea()
 			{
 				DynamicMeshComponent->SetDynamicMesh(OverlappedMesh);
 			}
+			
+			return;
 		}
 	}
+
+	OnBlockStacked(false);
+	Destroy();
 }
 
 
