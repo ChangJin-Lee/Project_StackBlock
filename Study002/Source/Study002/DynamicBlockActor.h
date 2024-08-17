@@ -8,6 +8,9 @@
 #include "Components/TimelineComponent.h"
 #include "DynamicBlockActor.generated.h"
 
+
+class UTimelineComponent;
+class ABlockSpawner;
 /**
  * 
  */
@@ -26,12 +29,25 @@ private:
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	UBoxComponent* BoxCollision;
-
-	virtual void BeginPlay() override;
 	
-	// UFUNCTION()
-	// void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void InitialIzeBlock();
+	
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	
+	
+private:
+	UFUNCTION()
+	void OnBlockStacked(bool IsStacked) const;
+	UFUNCTION()
+	void OnBlockUpdateLocation(const FVector& NewBlockLocation) const;
+	UFUNCTION()
+	void OnDropBlock();
 	
 // Function
 public:
@@ -53,32 +69,38 @@ public:
 
 	void SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxComponent* Box2);
 
-	// FTimerHandle TimerHandle;
-	//
-	//
+	void RemoveOverlappingArea();
+
+	
 	// UTimelineComponent* MoveBlockTimelineComponent;
-	//
-	// UPROPERTY()
-	// FOnTimelineFloat MoveBlockCallback;
-	//
-	// UPROPERTY()
-	// FOnTimelineEvent MoveBlockFinishedCallback;
-	//
-	// UPROPERTY(EditAnywhere)
-	// UCurveFloat* MoveBlockCurve;
-	//
-	// UFUNCTION()
-	// void HandleMoveProgress(float value);
-	//
-	// UFUNCTION()
-	// void HandleMoveFinished();
-	//
-	// FVector InitialLocation;
-	// FVector TargetLocation;
+	FTimeline Timeline;
+	
+	UPROPERTY(EditAnywhere)
+	UCurveFloat* MoveBlockCurve;
+
+	bool bIsBlockMoving;	
+	bool bIsStacked;
+	bool IsOverlapped = false;
+	
+	
+	UFUNCTION()
+	void HandleMoveProgress(float Value);
+
+	UFUNCTION()
+	void StopMovement();
+	
+	UFUNCTION()
+	void HandleMoveFinished();
+
+	UFUNCTION()
+	void ChangeBlockDirection(const FVector& NewTarget);
+	
+	void SetTargetLocation(const FVector& Value) { TargetLocation = Value;};
 
 private:
 	FVector OverlapLocationVector;
 	FVector OverlapExtentVector;
 
-	// bool IsOverlapped = false;
+	FVector InitialLocation;
+	FVector TargetLocation;
 };

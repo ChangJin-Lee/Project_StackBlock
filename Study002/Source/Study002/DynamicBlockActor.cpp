@@ -2,67 +2,183 @@
 
 
 #include "DynamicBlockActor.h"
+#include "DefaultGameInstance.h"
 #include "GeometryScript/MeshPrimitiveFunctions.h"
+#include "Kismet/GameplayStatics.h"
+
 
 ADynamicBlockActor::ADynamicBlockActor()
 {
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
+	
 	BoxCollision = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxCollision"));
 	BoxCollision->SetupAttachment(DynamicMeshComponent);
+
+	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ADynamicBlockActor::OnOverlapBegin);
+
+	Tags.Add("Block");
 }
 
-// void ADynamicBlockActor::BeginPlay()
-// {
-	// InitialLocation = GetActorLocation();
-	// TargetLocation = FVector(0,0, FMath::RandRange(500,800));
-	// FVector NormalVector = TargetLocation - InitialLocation;
-	//
-	// NormalVector.Normalize();
-	//
-	// TargetLocation += NormalVector * 800;
-	//
-	// MoveBlockCallback.BindUFunction(this , FName("HandleMoveProgress"));
-	// MoveBlockTimelineComponent->AddInterpFloat(MoveBlockCurve, MoveBlockCallback);
-	//
-	// MoveBlockFinishedCallback.BindUFunction(this, FName("HandleMoveFinished"));
-	// MoveBlockTimelineComponent->SetTimelineFinishedFunc(MoveBlockFinishedCallback);
+void ADynamicBlockActor::BeginPlay()
+{
+	Super::BeginPlay();
+	SetActorTickEnabled(true);
+}
+
+void ADynamicBlockActor::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 	
-// }
+	Timeline.TickTimeline(DeltaTime);
+}
 
-// void ADynamicBlockActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-// 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-// {
-// 	TargetLocation = GetActorLocation();
-//
-// 	if(!IsOverlapped)
-// 	{
-// 		if(OtherActor)
-// 		{
-// 			if(OtherActor->ActorHasTag("Floor"))
-// 			{
-// 				
-// 			}
-// 			else if(OtherActor->ActorHasTag("Block"))
-// 			{
-// 			
-// 			}
-// 		
-// 		}
-//
-//
-// 		IsOverlapped = true;
-// 	}
-// }
+void ADynamicBlockActor::InitialIzeBlock()
+{
+	InitialLocation = GetActorLocation();
+	FVector NormalVector = TargetLocation - InitialLocation;
+	NormalVector.Normalize();
+	TargetLocation += NormalVector * 800;
+	
+	if(MoveBlockCurve)
+	{
+		FOnTimelineFloat MoveBlockFunction;
+		MoveBlockFunction.BindUFunction(this, FName("HandleMoveProgress"));
+		Timeline.AddInterpFloat(MoveBlockCurve, MoveBlockFunction);
+		Timeline.SetLooping(false);
 
-// void ADynamicBlockActor::HandleMoveProgress(float value)
-// {
-// 	FVector NewLocation = FMath::Lerp(InitialLocation, TargetLocation, value);
-// 	SetActorLocation(NewLocation);
-// }
-//
-// void ADynamicBlockActor::HandleMoveFinished()
-// {
-// 	
-// }
+		FOnTimelineEvent EndMovementFunction;
+		EndMovementFunction.BindUFunction(this, FName("HandleMoveFinished"));
+		Timeline.SetTimelineFinishedFunc(EndMovementFunction);
+		
+		Timeline.PlayFromStart();
+	}
+	
+	if(UDefaultGameInstance* DefaultGameInstance = Cast<UDefaultGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		DefaultGameInstance->CallOnDropBlock.AddDynamic(this, &ADynamicBlockActor::OnDropBlock);
+	}	
+}
+
+
+void ADynamicBlockActor::OnDropBlock()
+{
+	StopMovement();
+	
+	// 블록을 자르기
+	RemoveOverlappingArea();
+
+	// 아래로 움직이기
+	FVector NewTargetLocation = GetActorLocation();
+	NewTargetLocation.Z = 0.f;
+	
+	ChangeBlockDirection(NewTargetLocation);
+}
+
+
+void ADynamicBlockActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(!IsOverlapped)
+	{
+		if(OtherActor && OtherActor != this)
+		{
+			if(OtherActor->ActorHasTag("Wall"))
+			{
+				return;
+			}
+			
+			if(OtherActor->ActorHasTag("Stackable"))
+			{
+				StopMovement();
+				OtherActor->Tags.Remove("Stackable");
+				OtherActor->Tags.Add("NonStackable");
+
+				Tags.Remove("Block");
+				Tags.Add("Stackable");
+				
+				OnBlockStacked(true);
+				OnBlockUpdateLocation(GetActorLocation());
+
+				if(UDefaultGameInstance* DefaultGameInstance = Cast<UDefaultGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+				{
+					DefaultGameInstance->CallOnDropBlock.RemoveDynamic(this, &ADynamicBlockActor::OnDropBlock);
+				}
+				
+				IsOverlapped = true;
+			}
+			else if(OtherActor->ActorHasTag("NonStackable"))
+			{
+				OnBlockStacked(false);
+				Destroy();
+			}
+		}
+	}
+}
+
+void ADynamicBlockActor::OnBlockStacked(const bool IsStacked) const
+{
+	if(UDefaultGameInstance* DefaultGameInstance = Cast<UDefaultGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		DefaultGameInstance->CallOnBlockStacked.Broadcast(IsStacked);
+	}
+}
+
+void ADynamicBlockActor::OnBlockUpdateLocation(const FVector& NewBlockLocation) const
+{
+	if(UDefaultGameInstance* DefaultGameInstance = Cast<UDefaultGameInstance>(UGameplayStatics::GetGameInstance(GetWorld())))
+	{
+		DefaultGameInstance->CallOnBlockUpdateLocation.Broadcast(NewBlockLocation);
+	}	
+}
+
+
+void ADynamicBlockActor::HandleMoveProgress(const float Value)
+{
+	FVector NewLocation = FMath::Lerp(InitialLocation, TargetLocation, Value);
+	SetActorLocation(NewLocation);
+}
+
+void ADynamicBlockActor::StopMovement()
+{
+	Timeline.Stop();
+}
+
+void ADynamicBlockActor::HandleMoveFinished()
+{
+	OnBlockStacked(false);
+	Destroy();
+}
+
+void ADynamicBlockActor::ChangeBlockDirection(const FVector& NewTarget)
+{
+	InitialLocation = GetActorLocation();
+	TargetLocation = NewTarget;
+
+	Timeline.PlayFromStart();
+}
+
+
+void ADynamicBlockActor::RemoveOverlappingArea()
+{
+	TArray<AActor*> OverlappingActors;
+
+	BoxCollision->GetOverlappingActors(OverlappingActors);
+
+	for(AActor* OverlappingActor: OverlappingActors)
+	{
+		if(OverlappingActor && OverlappingActor->ActorHasTag("Wall"))
+		{
+			UBoxComponent* TargetBoxComponent = Cast<UBoxComponent>(OverlappingActor->GetComponentByClass(UBoxComponent::StaticClass()));
+
+			if(UDynamicMesh* OverlappedMesh = GetOverlappedArea(TargetBoxComponent))
+			{
+				DynamicMeshComponent->SetDynamicMesh(OverlappedMesh);
+			}
+		}
+	}
+}
+
 
 // BoxCollision의 Scale에 따라서 매시의 크기가 바뀜
 void ADynamicBlockActor::OnConstruction(const FTransform& Transform)
@@ -107,9 +223,6 @@ void ADynamicBlockActor::SetOverlapExtentAndLocation(UBoxComponent* Box1, UBoxCo
 	
 	OverlapLocationVector = (OverlapMin + OverlapMax) / 2.0f;
 	OverlapExtentVector = OverlapMax - OverlapMin;
-
-	UE_LOG(LogTemp, Warning, TEXT("OverlapLocationVector :  %s"), *OverlapLocationVector.ToString());
-	UE_LOG(LogTemp, Warning, TEXT("OverlapExtentVector :  %s"), *OverlapExtentVector.ToString());
 }
 
 // 겹친 영역 만큼 DynamicMesh를 만들고 Return하는 함수
